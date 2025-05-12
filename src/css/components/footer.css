@@ -1,0 +1,10 @@
+.footer div {
+  @apply flex flex-col items-center;
+}
+.footer div h2 {
+  @apply font-bold mb-4 text-[18px];
+}
+
+.footer div h2 + * {
+  @apply text-gray-500;
+}

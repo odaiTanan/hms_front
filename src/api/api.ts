@@ -1,0 +1,11 @@
+export const HOST: string = "http://localhost:4000/api/v1/";
+export const REGISTER: string = "/user/patient/register";
+export const LOGIN: string = "/user/login";
+export const ADMIN: string = "/user/admin/me";
+export const GET_ALL_APPOINTEMENTS: string = "/appointment/getall";
+export const DELETE_APPOINTMENT: string = "/appointment/delete/";
+export const GET_ALL_DOCTORS: string = "/user/doctors";
+export const ADD_DOCTOR: string = "/user/doctor/addnew";
+export const ADD_APPOINTMENT: string = "/appointment/post";
+export const GET_DOCTOR_BYID: string = "/user/doctor/";
+export const GET_AVAILABLE_TIME: string = "/appointment/available-slots";

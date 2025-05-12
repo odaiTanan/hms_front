@@ -1,0 +1,48 @@
+/*Lato Import*/
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@custom-variant dark (&:where(.dark, .dark *));
+* {
+  font-family: "Lato", sans-serif;
+  scroll-behavior: smooth;
+
+  @apply m-0 p-0 box-border;
+}
+
+span:not(.formspan) {
+  @apply dark:text-tcolor;
+}
+.center {
+  @apply flex justify-center items-center;
+}
+.container {
+  @apply mx-auto px-3 sm:max-w-[600px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1200px];
+}
+/*react toastify */
+.Toastify__close-button {
+  @apply dark:text-gray-300 !important;
+}
+/*dark*/
+@layer base {
+  :root {
+    --primary: 125 10 10; /* #7D0A0A */
+    --secondary: 191 49 49; /* #BF3131 */
+    --primary2: 125 10 10 / 78%; /* rgb(125 10 10 / 78%) */
+    --background: 238, 238, 238; /* rgb(125 10 10 / 78%) */
+    --tcolor: black; /* rgb(125 10 10 / 78%) */
+    --g: 238 238 238; /* #EEEEEE */
+    --skin: 234 209 150; /* #EAD196 */
+  }
+
+  .dark {
+    --primary: 96 165 250;
+    --secondary: 125 10 10;
+    --primary2: 96 165 250 / 78%;
+    --background: 23 23 23;
+    --tcolor: rgb(206, 202, 202);
+    --g: 238 238 238;
+    --skin: 234 209 150 / 50%;
+  }
+}

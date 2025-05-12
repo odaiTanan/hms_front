@@ -1,0 +1,6 @@
+.sidebar a {
+  @apply dark:hover:text-background hover:text-gray-400;
+}
+.sidebar .active {
+  @apply dark:text-background text-gray-400;
+}

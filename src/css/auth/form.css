@@ -1,0 +1,9 @@
+.form-container {
+  @apply w-full bg-g md:bg-white dark:bg-background  items-center  min-h-screen flex justify-center;
+}
+.form {
+  @apply rounded-xl overflow-hidden md:flex-row flex flex-col md:bg-primary h-fit  items-center  md:shadow-[0_2px_10px_-3px_rgba(0,0,0,0.5)];
+}
+.inputs-container {
+  @apply md:bg-white  order-2 rounded-e-2xl min-h-[245px]  px-[20px]  w-[300px];
+}

@@ -1,0 +1,6 @@
+.hours {
+  @apply p-4 rounded-lg  transition duration-[.2s] hover:bg-primary cursor-pointer dark:hover:bg-primary;
+}
+.two-inputs {
+  @apply w-full grid justify-items-center  md:grid-cols-2;
+}
