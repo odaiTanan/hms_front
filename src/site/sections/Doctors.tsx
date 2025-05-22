@@ -20,7 +20,6 @@ const Doctors = () => {
         department={doctor.doctorDepartment}
         avatar={doctor.docAvatar.url}
         id={doctor._id}
-        home={true}
         type="user"
       />
     );

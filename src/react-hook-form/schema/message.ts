@@ -1,4 +1,4 @@
-import { z, string } from "zod";
+import { z } from "zod";
 export const MessageSchema = z.object({
   name: z.string().min(3, "name must have at least 3 characters"),
   phone: z
@@ -6,5 +6,5 @@ export const MessageSchema = z.object({
     .min(1, { message: "phone is required" })
     .length(10, "phone number must be 10 digits")
     .regex(/^[0-9]+$/, "phone must only has numbers"),
-  message: string().min(1, "enter message"),
+  message: z.string().min(1, "enter message"),
 });

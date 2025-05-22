@@ -1,4 +1,4 @@
-import { z, string } from "zod";
+import { z } from "zod";
 export const RegisterSchema = z
   .object({
     name: z.string().min(3, { message: "name must be more than 2 letters" }),

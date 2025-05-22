@@ -1,4 +1,4 @@
-import { z, any } from "zod";
+import { z } from "zod";
 export const AddDoctorSchema = z.object({
   name: z.string().min(3, { message: "name must be more than 2 letters" }),
   email: z.string().min(1, { message: "email is required" }).email(),

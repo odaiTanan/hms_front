@@ -11,7 +11,6 @@ const Messages = () => {
     error,
     isLoading,
   } = useGetQuery({ api: GET_MESSAGES, queryKey: "messages" });
-  console.log(messages);
 
   if (error) return "some thing went wrong";
   const show = messages?.data.messages.map(

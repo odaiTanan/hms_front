@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "../../react-hook-form/Input";
 import Button from "../../components/Button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -19,7 +19,6 @@ type Props = {
 const Appointment = (props: Props) => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const nav = useNavigate();
-  const [disable, setDisable] = useState(false);
   //form handling
   type appointment = z.infer<typeof addAppointmentSchema>;
   const {

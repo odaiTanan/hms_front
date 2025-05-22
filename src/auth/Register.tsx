@@ -8,7 +8,6 @@ import { RegisterSchema } from "../react-hook-form/schema/register";
 import BigLogo from "../assets/BigLogo";
 import { toast } from "react-toastify";
 import useAuthQuery from "../queries/auth/useAuthQuery";
-import { CustomCloseButton } from "../toastify/CustomCloseButton";
 
 const Register = () => {
   //toastify notifies

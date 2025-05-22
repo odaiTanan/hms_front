@@ -18,20 +18,16 @@ const SingleDoctor = () => {
   //doctor id
   const id = useParams()?.id;
   //get doctor selected
-  const { data: doctor, isLoading: l_docotr } = useGetDocById({ id });
+  const { data: doctor } = useGetDocById({ id });
   //full work hours
-  const hour: number[] = [2, 3, 4, 5, 6, 7, 8];
+
   const dates: times[] = [];
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHours, setSelectedHours] = useState("");
-  const { data: availableHours, isLoading: l_available } = useGetAvailableHours(
-    {
-      date: selectedDate,
-      doctorId: id,
-    }
-  );
-
-  console.log(availableHours);
+  const { data: availableHours } = useGetAvailableHours({
+    date: selectedDate,
+    doctorId: id,
+  });
 
   //get next coming 7 days to choose time on on of them
   for (let i = 0; i < 7; i++) {
@@ -81,8 +77,6 @@ const SingleDoctor = () => {
       );
     }
   );
-  //available hours for doctor
-  const [avilable, setAvailable] = useState([]);
   return (
     <div className=" bg-g dark:bg-background w-full center">
       <div className="min-h-[calc(100vh_-_130px)] container ">

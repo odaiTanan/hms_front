@@ -14,7 +14,6 @@ const Nav = () => {
   const { data: user } = useUserQuery();
   //handle menu show
   const [visible, setVisible] = useState(false);
-  console.log(user);
   const cookie = new Cookies();
   const [In, setIn] = useState(false);
   useEffect(() => {
@@ -33,7 +32,6 @@ const Nav = () => {
       document.body.removeEventListener("click", clickOut);
     };
   }, []);
-  console.log(visible);
 
   return (
     <div className="w-full    bg-[linear-gradient(92deg,rgba(255,210,189,1)0%,rgba(238,238,238,1)40%,rgba(238,238,238,1)60%,rgba(255,210,189,1)100%)] dark:bg-none dark:!bg-background  sticky top-0 z-[1000] shadow-md  dark:shadow-gray-600 dark:shadow-sm ">

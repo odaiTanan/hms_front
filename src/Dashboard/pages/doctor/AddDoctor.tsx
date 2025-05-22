@@ -6,14 +6,11 @@ import { AddDoctorSchema } from "../../../react-hook-form/schema/addDoctor";
 import useAddDoctorMutation from "../../../queries/doctor/useAddDoctorMutation";
 import Input from "../../../react-hook-form/Input";
 import Button from "../../../components/Button";
-import { CustomCloseButton } from "../../../toastify/CustomCloseButton";
 import avatar from "../../../assets/image.jpg";
 import { useEffect, useRef, useState } from "react";
 import { demo } from "../../../DemoErr";
 
-type Props = {};
-
-const AddDoctor = (props: Props) => {
+const AddDoctor = () => {
   // Handle view selected avatar (URL for displaying image)
   const [selectedAvatar, setSelectedAvatar] = useState<string | undefined>();
   // Store file (File object to upload)
@@ -50,10 +47,9 @@ const AddDoctor = (props: Props) => {
       }
     }
   }, [errors, isValid, isSubmitting]);
-  console.log(errors);
 
   // Submit handler
-  const { mutation, loading } = useAddDoctorMutation();
+  const { /*mutation,*/ loading } = useAddDoctorMutation();
   const onSubmit: SubmitHandler<inputs> = async (inputs: inputs) => {
     const formData = new FormData();
     formData.append("name", inputs.name);

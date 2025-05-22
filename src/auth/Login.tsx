@@ -7,7 +7,6 @@ import Button from "../components/Button";
 import { Link } from "react-router-dom";
 import BigLogo from "../assets/BigLogo";
 import { toast } from "react-toastify";
-import { CustomCloseButton } from "../toastify/CustomCloseButton";
 import useAuthQuery from "../queries/auth/useAuthQuery";
 const Login = () => {
   //react toastify notifies

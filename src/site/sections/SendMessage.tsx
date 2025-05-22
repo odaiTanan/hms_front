@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import { CustomCloseButton } from "../../toastify/CustomCloseButton";
 import usePost from "../../queries/public/usePost";
 import { SEND_MESSAGE } from "../../api/api";
 import Spinner from "../../components/Spinner";

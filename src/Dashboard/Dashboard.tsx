@@ -5,9 +5,7 @@ import Loading from "../components/Loading";
 import useGetQuery from "../queries/public/useGetQuery";
 import { GET_ALL_APPOINTEMENTS } from "../api/api";
 
-type Props = {};
-
-const Dashboard = (props: Props) => {
+const Dashboard = () => {
   //to check authantication
   const { error: e1, isLoading: l1 } = useGetQuery({
     api: GET_ALL_APPOINTEMENTS,
