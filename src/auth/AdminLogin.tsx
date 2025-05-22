@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../components/Button";
 import BigLogo from "../assets/BigLogo";
 import { toast } from "react-toastify";
-import { CustomCloseButton } from "../toastify/CustomCloseButton";
 import useAuthQuery from "../queries/auth/useAuthQuery";
 
 const AdminLogin = () => {
@@ -22,7 +21,6 @@ const AdminLogin = () => {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
   } = useForm<inputs>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {

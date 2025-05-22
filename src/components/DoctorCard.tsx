@@ -18,7 +18,7 @@ type Props = {
 
 const DoctorCard = (props: Props) => {
   //handle delete in dashboard card
-  const { mutation, isDeleteSuccess, loading } = useDelete({
+  const { /*mutation,*/ isDeleteSuccess, loading } = useDelete({
     api: DELETE_DOCTOR,
     queryKey: "doctors",
   });

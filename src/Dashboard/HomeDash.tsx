@@ -129,10 +129,13 @@ const HomeDash = () => {
 
   //show any error accord
   const errNotify = () =>
-    toast.error(`${e2?.message || e3?.message || e4?.message}`, {
+    toast.error(`${e2?.message || e3?.message || e4?.message || e5?.message}`, {
       toastId: "validation-error",
       className: "text-primary dark:bg-gray-800",
     });
+  useEffect(() => {
+    if (e2?.message || e3?.message || e4?.message || e5?.message) errNotify();
+  }, [e2, e3, e4, e5]);
   //display appointments
   const showAppointments = appointments?.data.appointments.map(
     (appointment: appointment, index: number) => {
@@ -156,7 +159,7 @@ const HomeDash = () => {
             >
               <select
                 defaultValue={appointment.status}
-                onChange={(e) => {
+                onChange={() => {
                   demo();
                   /*
                   const val = e.target.value;

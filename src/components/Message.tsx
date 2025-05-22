@@ -16,10 +16,10 @@ type Props = {
 
 const Message = (props: Props) => {
   //select loading item
-  const [loadingDeleteId, setLaodingDeleteId] = useState<string>("");
+  const [loadingDeleteId /* setLaodingDeleteId*/] = useState<string>("");
   //delete message mutation
   const {
-    mutation: deleteMessage,
+    /* mutation: deleteMessage,*/
     isDeleteSuccess,
     loading: loadingDelete,
   } = useDelete({ api: DELETE_MESSAGE, queryKey: "messages" });
