@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const addAppointmentSchema = z.object({
-  name: z.string().min(1, { message: "name is required" }),
+  name: z.string().min(3, { message: "name must be more than 2 characters" }),
   email: z
     .string()
     .email({ message: "email is invalid" })
@@ -12,5 +12,5 @@ export const addAppointmentSchema = z.object({
   appointment_date: z.string(),
   department: z.string().min(1, { message: "department field is required" }),
   doctor_name: z.string().min(1, { message: "doctor name is required" }),
-  hasVisited: z.string(),
+  hasVisited: z.boolean(),
 });

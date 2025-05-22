@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { GET_DOCTOR_BYID } from "../api/api";
-import { Axios } from "./../api/Axios";
-import React from "react";
+import { GET_DOCTOR_BYID } from "../../api/api";
+import { Axios } from "../../api/Axios";
 
 type Props = { id?: string };
 

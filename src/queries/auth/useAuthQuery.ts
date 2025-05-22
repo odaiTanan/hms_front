@@ -1,7 +1,7 @@
 import Cookies from "universal-cookie";
-import { LOGIN, REGISTER } from "./../api/api";
+import { LOGIN, REGISTER } from "../../api/api";
 import { useMutation } from "@tanstack/react-query";
-import { Axios } from "../api/Axios";
+import { Axios } from "../../api/Axios";
 import { useNavigate } from "react-router-dom";
 type Props = {
   inputs: { name?: string; email: string; password: string };
@@ -28,8 +28,14 @@ const useAuthQuery = () => {
     onSuccess(data) {
       //universal cookie usage
       const cookies = new Cookies();
-      cookies.set("bearer", data?.data?.token);
-      data?.data?.user.role == "Admin" ? nav("/dashboard") : nav("/");
+
+      if (data?.data?.user.role == "Admin") {
+        cookies.set("role", "a", { path: "/" });
+        nav("/dashboard/home");
+      } else {
+        cookies.set("role", "p", { path: "/" });
+        window.location.pathname = "/";
+      }
     },
   });
 

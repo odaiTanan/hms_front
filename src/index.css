@@ -10,7 +10,14 @@
 
   @apply m-0 p-0 box-border;
 }
+.section {
+  @apply min-h-[calc(80vh_-_75px)] container mb-[70px];
+}
+.border-gradient {
+  @apply w-64 h-64 border-8 border-transparent;
 
+  border-top: linear-gradient(to right, #ec4899, #f59e0b, #3b82f6);
+}
 span:not(.formspan) {
   @apply dark:text-tcolor;
 }
@@ -18,11 +25,26 @@ span:not(.formspan) {
   @apply flex justify-center items-center;
 }
 .container {
-  @apply mx-auto px-3 sm:max-w-[600px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1200px];
+  @apply mx-auto px-4 sm:max-w-[600px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1200px];
 }
 /*react toastify */
 .Toastify__close-button {
   @apply dark:text-gray-300 !important;
+}
+.text-area:not(:placeholder-shown) + label {
+  @apply hidden;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
 }
 /*dark*/
 @layer base {
@@ -33,7 +55,7 @@ span:not(.formspan) {
     --background: 238, 238, 238; /* rgb(125 10 10 / 78%) */
     --tcolor: black; /* rgb(125 10 10 / 78%) */
     --g: 238 238 238; /* #EEEEEE */
-    --skin: 234 209 150; /* #EAD196 */
+    --skin: 255 210 189; /*  */
   }
 
   .dark {

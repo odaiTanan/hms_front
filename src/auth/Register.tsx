@@ -6,8 +6,8 @@ import Button from "../components/Button";
 import { Link } from "react-router-dom";
 import { RegisterSchema } from "../react-hook-form/schema/register";
 import BigLogo from "../assets/BigLogo";
-import { ToastContainer, toast } from "react-toastify";
-import useAuthQuery from "../queries/useAuthQuery";
+import { toast } from "react-toastify";
+import useAuthQuery from "../queries/auth/useAuthQuery";
 import { CustomCloseButton } from "../toastify/CustomCloseButton";
 
 const Register = () => {
@@ -88,8 +88,6 @@ const Register = () => {
           <BigLogo className="mx-auto w-full  h-[230px] bg-[#eeeeee] dark:bg-background dark:md:bg-[#eeeeee]  " />
         </div>
       </form>
-
-      <ToastContainer closeButton={CustomCloseButton} />
     </div>
   );
 };

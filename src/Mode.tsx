@@ -28,12 +28,12 @@ const Mode = () => {
       <button onClick={toggle}>
         {theme !== "dark" ? (
           <FontAwesomeIcon
-            className="text-gray-800 w-[20px] h-[20px] text-[20px] transition duration-[.2s] p-2 rounded-[50%] hover:bg-gray-400 "
+            className="text-gray-800 outline-none w-[20px] h-[20px] text-[20px] transition duration-[.2s] p-2 rounded-[50%] hover:bg-gray-400 "
             icon={faMoon}
           />
         ) : (
           <FontAwesomeIcon
-            className=" text-yellow-400 w-[20px] h-[20px] text-[20px] transition duration-[.2s] p-2 rounded-[50%] hover:bg-gray-400"
+            className=" text-yellow-400 outline-none w-[20px] h-[20px] text-[20px] transition duration-[.2s] p-2 rounded-[50%] hover:bg-gray-400"
             icon={faSun}
           />
         )}

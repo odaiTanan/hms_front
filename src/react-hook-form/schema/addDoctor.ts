@@ -12,16 +12,4 @@ export const AddDoctorSchema = z.object({
   doctorDepartment: z
     .string()
     .min(1, { message: "doctor department field is required" }),
-  docAvatar: z
-    .instanceof(FileList)
-    .refine((files) => files?.length > 0, "avatar is required")
-    .refine(
-      (files) => files[0]?.size < 5 * 1024 * 1024,
-      "avatar size must be less than 5mb"
-    )
-    .refine(
-      (files) =>
-        ["image/jpeg", "image/png", "image/webp"].includes(files[0]?.type),
-      "accebted images are .png,.jpeg,.webp "
-    ),
 });

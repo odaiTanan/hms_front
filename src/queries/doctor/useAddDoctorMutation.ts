@@ -1,5 +1,6 @@
+import { ADD_DOCTOR } from "../../api/api";
 import { useMutation } from "@tanstack/react-query";
-import { Axios } from "../api/Axios";
+import { Axios } from "../../api/Axios";
 import { useNavigate } from "react-router-dom";
 type Props = {
   formData: FormData;
@@ -7,8 +8,7 @@ type Props = {
 const useAddDoctorMutation = () => {
   const addDoctor = async ({ formData }: Props) => {
     try {
-      //if name input exist that mean it is register form else login
-      const res = await Axios.post("user/doctor/addnew", formData);
+      const res = await Axios.post(ADD_DOCTOR, formData);
       return res;
     } catch (err) {
       throw err;
@@ -17,8 +17,8 @@ const useAddDoctorMutation = () => {
   const nav = useNavigate();
   const mutation = useMutation({
     mutationFn: addDoctor,
-    onSuccess(data) {
-      //data?.data?.user.role == "Admin" ? nav("/dashboard") : nav("/");
+    onSuccess() {
+      nav("/dashboard/doctors");
     },
   });
 

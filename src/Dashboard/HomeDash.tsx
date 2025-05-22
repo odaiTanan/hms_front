@@ -1,9 +1,4 @@
-import { toast, ToastContainer } from "react-toastify";
-import Err404 from "../auth/Err404";
-import useAppointmentsQuery from "../queries/useAppointementsQuery";
-import useDeleteAppintment from "../queries/useDeleteAppintment";
-import useGetDoctorsQuery from "../queries/useGetDoctorsQuery";
-import useUserQuery from "../queries/useUserQuey";
+import { toast } from "react-toastify";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,13 +8,23 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  elements,
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import { CustomCloseButton } from "../toastify/CustomCloseButton";
-import { useEffect, useRef, useState } from "react";
+import "../css/dashboard/homedash.css";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import useUpdateStatus from "../queries/appointment/useUpdateStatus";
+import Loading from "../components/Loading";
+import useDelete from "../queries/public/useDelete";
+import {
+  DELETE_APPOINTMENT,
+  GET_ALL_APPOINTEMENTS,
+  GET_ALL_DOCTORS,
+} from "../api/api";
+import useGetQuery from "../queries/public/useGetQuery";
+import Spinner from "../components/Spinner";
+import { demo } from "../DemoErr";
 type appointment = {
   appointment_date: string;
   department: string;
@@ -45,44 +50,86 @@ ChartJS.register(
   Legend,
   ArcElement
 );
-type Props = {};
-
-const HomeDash = (props: Props) => {
-  //get user query
-  const { data: user, error: e1, isLoading: l1 } = useUserQuery();
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Accepted":
+      return "bg-green-400";
+    case "Rejected":
+      return "bg-red-400";
+    default:
+      return "bg-yellow-400";
+  }
+};
+function reducer(
+  state: { cardiology: number; orthopedics: number; pediatrics: number },
+  action: { type: string }
+) {
+  switch (action.type) {
+    case "cardiology":
+      return { ...state, cardiology: state.cardiology + 1 };
+    case "orthopedics":
+      return { ...state, orthopedics: state.orthopedics + 1 };
+    case "pediatrics":
+      return { ...state, pediatrics: state.pediatrics + 1 };
+    case "reset":
+      return { cardiology: 0, orthopedics: 0, pediatrics: 0 };
+    default:
+      return state;
+  }
+}
+const HomeDash = () => {
+  //get every section appointments count for pie chart
+  const [state, dispatch] = useReducer(reducer, {
+    cardiology: 0,
+    orthopedics: 0,
+    pediatrics: 0,
+  });
   //get doctors query
-  const { data: doctors, error: e2, isLoading: l2 } = useGetDoctorsQuery();
+  const {
+    data: doctors,
+    error: e2,
+    isLoading: l2,
+  } = useGetQuery({ api: GET_ALL_DOCTORS, queryKey: "doctors" });
+
   //get appointments query
   const {
     data: appointments,
     error: e3,
     isLoading: l3,
-  } = useAppointmentsQuery();
+  } = useGetQuery({ api: GET_ALL_APPOINTEMENTS, queryKey: "appointments" });
   //delete appointment mutation
   const {
     mutation: deleteMutation,
     error: e4,
-    loading: l4,
+    loading: deleteLoading,
     isDeleteSuccess,
-  } = useDeleteAppintment();
+  } = useDelete({ api: DELETE_APPOINTMENT, queryKey: "appointments" });
+  const { mutation: updateMutation, error: e5 } = useUpdateStatus();
+  useEffect(() => {
+    if (appointments?.data?.appointments) {
+      dispatch({ type: "reset" });
+      appointments.data.appointments.forEach((appointment: appointment) => {
+        dispatch({ type: appointment.department });
+      });
+    }
+  }, [appointments?.data?.appointments]);
   // cancle buttons to handle delete and loading
-  const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const [deleteLoadingBtn, setDeleteLoadingBtn] = useState<string>("");
   //status select bg depending on option
   const selectContainers = useRef<(HTMLDivElement | null)[]>([]);
-  //dilited appointment index
-  const [deletedIndex, setDeletedIndex] = useState<number>(0);
-  //delete cancle button from array and set the new one to display block
+  const success = () => {
+    toast.success("appointment deleted successfuly");
+  };
   useEffect(() => {
     if (isDeleteSuccess) {
-      buttonsRef.current.splice(deletedIndex, 1);
-      if (buttonsRef.current[deletedIndex]) {
-        buttonsRef.current[deletedIndex].style.display = "block";
-      }
+      success();
+      setDeleteLoadingBtn("");
     }
   }, [isDeleteSuccess]);
+
   //show any error accord
   const errNotify = () =>
-    toast.error(`${e1?.message || e2?.message || e3?.message || e4?.message}`, {
+    toast.error(`${e2?.message || e3?.message || e4?.message}`, {
       toastId: "validation-error",
       className: "text-primary dark:bg-gray-800",
     });
@@ -94,57 +141,43 @@ const HomeDash = (props: Props) => {
           className="hover:bg-gray-50 dark:border border-primary transition-colors dark:bg-gray-800 dark:text-gray-100   even:bg-red-100 even:dark:bg-gray-700"
           key={index}
         >
-          <td className="p-4"> {appointment.name}</td>
-          <td className="p-4">{appointment.appointment_date}</td>
-          <td className="p-4">{appointment.doctor.name}</td>
-          <td className="p-4">{appointment.department}</td>
-          <td className="p-4">
+          <td className="p-1 md:p-2 lg:p-4"> {appointment.name}</td>
+          <td className="p-1 md:p-2 lg:p-4">{appointment.appointment_date}</td>
+          <td className="p-1 md:p-2 lg:p-4">{appointment.doctor.name}</td>
+          <td className="p-1 md:p-2 lg:p-4">{appointment.department}</td>
+          <td className="p-1 md:p-2 lg:p-4">
             <div
               ref={(element) => {
                 selectContainers.current[index] = element;
               }}
-              className="px-2 py-1 w-fit rounded-full bg-yellow-400 text-xs dark:text-white text-white"
+              className={`px-2 py-1 w-fit rounded-full ${getStatusColor(
+                appointment.status
+              )} text-xs dark:text-white text-white`}
             >
               <select
+                defaultValue={appointment.status}
                 onChange={(e) => {
+                  demo();
+                  /*
                   const val = e.target.value;
                   const item = selectContainers.current[index];
                   item!.style.backgroundColor =
                     val == "Accepted" ? "green" : "red";
+                  updateMutation.mutate({
+                    id: appointment._id,
+                    status: e.target.value,
+                  });*/
                 }}
                 className="bg-transparent outline-none"
                 name="status"
               >
-                <option
-                  onClick={() =>
-                    (selectContainers.current[index]!.style.backgroundColor =
-                      "yellow")
-                  }
-                  value="Pending"
-                  className="text-yellow-400"
-                  disabled
-                  selected
-                >
+                <option disabled value="Pending" className="text-yellow-400">
                   Pending
                 </option>
-                <option
-                  onClick={() =>
-                    (selectContainers.current[index]!.style.backgroundColor =
-                      "green")
-                  }
-                  value="Accepted"
-                  className="text-green-400"
-                >
+                <option disabled value="Accepted" className="text-green-400">
                   Accepted
                 </option>
-                <option
-                  onClick={() =>
-                    (selectContainers.current[index]!.style.backgroundColor =
-                      "red")
-                  }
-                  value="Rejected"
-                  className="text-red-400"
-                >
+                <option disabled value="Rejected" className="text-red-400">
                   Rejected
                 </option>
               </select>
@@ -152,75 +185,157 @@ const HomeDash = (props: Props) => {
             </div>
           </td>
           <td className="p-4">
-            <div className="px-2 py-1 w-fit rounded-full text-xs dark:text-white bg-green-100 dark:bg-green-400 text-green-800">
+            <div
+              className={`px-2 py-1 w-fit rounded-full text-xs ${
+                appointment.hasVisited == true
+                  ? "bg-green-100 dark:bg-green-400 text-green-800"
+                  : "bg-red-100 dark:bg-red-300 text-red-800"
+              }`}
+            >
               {"" + appointment.hasVisited}
             </div>
           </td>
           <td className="p-4 ">
-            <button
-              key={index}
-              ref={(element) => {
-                buttonsRef.current[index] = element;
-              }}
-              onClick={() => {
-                // Hide the clicked button by setting its display to 'none'
-                const button = buttonsRef.current[index];
-                if (button) {
-                  button.style.display = "none";
-                  deleteMutation.mutate(appointment._id);
-                  setDeletedIndex(index);
-                }
-              }}
-              className="text-[#ff0000]"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-            <div
-              role="status"
-              className={`${
-                buttonsRef.current[index]?.style.display == "none"
-                  ? "block"
-                  : "hidden"
-              }`}
-            >
-              <svg
-                aria-hidden="true"
-                className="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-primary"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            {!(deleteLoading && deleteLoadingBtn == appointment._id) ? (
+              <button
+                key={index}
+                onClick={() => {
+                  demo();
+                  //select deleted element to make spinner loading on it
+                  //    setDeleteLoadingBtn(appointment._id);
+                  //  deleteMutation.mutate(appointment._id);
+                }}
+                className="text-[#ff0000]"
               >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-            </div>
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            ) : (
+              //spinner
+              <Spinner />
+            )}
           </td>
         </tr>
       );
     }
   );
-  return l1 || l2 || l3 ? (
-    "loading"
+  //show appointments for small screens
+  const showinSmall = appointments?.data.appointments.map(
+    (appointment: appointment, index: number) => {
+      return (
+        <div className="cells-con" key={index}>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Patient</h1>
+            <p className=""> {appointment.name}</p>
+          </div>
+          <div className="responsive-cell ">
+            <h1>Date</h1>
+            <p className="">{appointment.appointment_date}</p>
+          </div>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Doctor</h1>
+            <p className="">{appointment.doctor.name}</p>
+          </div>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Department</h1>
+            <p className="">{appointment.department}</p>
+          </div>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Status</h1>{" "}
+            <div
+              ref={(element) => {
+                selectContainers.current[index] = element;
+              }}
+              className={`px-[.5px] py-1 w-fit rounded-full ${getStatusColor(
+                appointment.status
+              )} text-xs dark:text-white text-white`}
+            >
+              <select
+                defaultValue={appointment.status}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const item = selectContainers.current[index];
+                  item!.style.backgroundColor =
+                    val == "Accepted" ? "green" : "red";
+                  updateMutation.mutate({
+                    id: appointment._id,
+                    status: e.target.value,
+                  });
+                }}
+                className="bg-transparent outline-none"
+                name="status"
+              >
+                <option value="Pending" className="text-yellow-400" disabled>
+                  Pending
+                </option>
+                <option value="Accepted" className="text-green-400">
+                  Accepted
+                </option>
+                <option value="Rejected" className="text-red-400">
+                  Rejected
+                </option>
+              </select>
+              {/*appointment.status*/}
+            </div>
+          </div>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Visited Before</h1>{" "}
+            <div
+              className={`p-1 w-fit rounded-full text-xs ${
+                appointment.hasVisited == true
+                  ? "bg-green-100 dark:bg-green-400 text-green-800"
+                  : "bg-red-100 dark:bg-red-300 text-red-800"
+              }`}
+            >
+              {"" + appointment.hasVisited}
+            </div>
+          </div>
+          <div className="responsive-cell ">
+            {" "}
+            <h1>Actions</h1>
+            <div>
+              {!(deleteLoading && deleteLoadingBtn == appointment._id) ? (
+                <button
+                  key={index}
+                  onClick={() => {
+                    //select deleted element to make spinner loading on it
+                    setDeleteLoadingBtn(appointment._id);
+                    deleteMutation.mutate(appointment._id);
+                  }}
+                  className="text-[#ff0000]"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              ) : (
+                //spinner
+                <Spinner />
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  );
+  return l2 || l3 ? (
+    <Loading />
   ) : (
-    <div>
-      <div className="center my-4">
+    <div className="w-full">
+      <div className="center w-full my-4">
         <div
-          className="flex
+          className="flex w-full
 justify-center 
-md:justify-between
+lg:justify-between
 items-center
 gap-8
-flex-wrap w-[90%]"
+flex-wrap "
         >
           {" "}
           <div
-            className="w-[300px]  md:w-[500px] 
+            className="w-[230px]  md:w-[500px] 
 h-[240px] 
 bg-primary dark:bg-[#183B4E]
 rounded-xl 
@@ -238,8 +353,11 @@ border-[#022f34]"
                 labels: ["doctors", "appointements"],
                 datasets: [
                   {
-                    label: "statistics",
-                    data: [doctors?.data?.doctors.length, 59],
+                    label: "count",
+                    data: [
+                      doctors?.data?.doctors.length,
+                      appointments?.data.appointments?.length,
+                    ],
                     backgroundColor: ["#DDA853", "#27548A"],
                     borderColor: ["rgb(120, 52, 75)", "rgb(0, 0, 64)"],
                     borderWidth: 1,
@@ -281,26 +399,27 @@ border-[#022f34]"
             className="
 transition-all 
 duration-300
-h-[300px]
-w-[300px]
+h-[220px]
+w-[220px]
+md:h-[300px]
+md:w-[300px]
 p-2
 "
           >
             {" "}
             <Pie
               data={{
-                labels: ["cardeo", "Blue", "Yellow", "Green"],
+                labels: ["Cardiology", "Orthopedics", "Pediatrics"],
                 datasets: [
                   {
                     label: "appointments",
-                    data: [12, 19, 3, 5],
-                    backgroundColor: [
-                      "#F7DCB9",
-                      "#FF8225",
-                      "#B43F3F",
-                      "#173B45",
+                    data: [
+                      state.cardiology,
+                      state.orthopedics,
+                      state.pediatrics,
                     ],
-                    borderColor: ["#F7DCB9", "#FF8225", "#B43F3F", "#173B45"],
+                    backgroundColor: ["#F7DCB9", "#FF8225", "#B43F3F"],
+                    borderColor: ["#F7DCB9", "#FF8225", "#B43F3F"],
                     borderWidth: 1,
                   },
                 ],
@@ -310,24 +429,27 @@ p-2
         </div>
       </div>
       <div className="w-full my-7">
-        <table className="w-full bg-white rounded-xl overflow-hidden shadow-md">
+        <table className="w-full hidden md:table bg-white rounded-xl overflow-hidden shadow-md">
           <thead className="bg-primary text-white dark:text-gray-800">
             <tr className="text-left">
-              <th className="p-4">Patient</th>
-              <th className="p-4">Date</th>
-              <th className="p-4">Doctor</th>
-              <th className="p-4">Department</th>
-              <th className="p-4">Status</th>
-              <th className="p-4">Visited Before</th>
-              <th className="p-4">Actions</th>{" "}
+              <th className="p-1 md:p-2 lg:p-4">Patient</th>
+              <th className="p-1 md:p-2 lg:p-4">Date</th>
+              <th className="p-1 md:p-2 lg:p-4">Doctor</th>
+              <th className="p-1 md:p-2 lg:p-4">Department</th>
+              <th className="p-1 md:p-2 lg:p-4">Status</th>
+              <th className="p-1 md:p-2 lg:p-4">Visited Before</th>
+              <th className="p-1 md:p-2 lg:p-4">Actions</th>{" "}
             </tr>
           </thead>
 
           <tbody className="">{showAppointments}</tbody>
         </table>
-      </div>{" "}
-      <ToastContainer closeButton={CustomCloseButton} />
-      <span className="loading loading-spinner text-neutral"></span>
+        <div className="justify-center  justify-items-center grid-cols-[repeat(auto-fill,minmax(220px,1fr))] md:hidden  gap-4 ">
+          <h1 className="text-center mt-8 mb-4 text-primary">Appointments</h1>
+          {showinSmall}
+        </div>{" "}
+        <span className="loading loading-spinner text-neutral"></span>
+      </div>
     </div>
   );
 };

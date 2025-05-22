@@ -1,11 +1,14 @@
-import { date, z } from "zod";
-import { addAppointmentSchema } from "../react-hook-form/schema/addAppointment";
+import { addAppointmentSchema } from "../../react-hook-form/schema/addAppointment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "../react-hook-form/Input";
-import Button from "../components/Button";
-import { useEffect } from "react";
-import useAppointmentMutation from "../queries/useAppointmentMutation";
+import Input from "../../react-hook-form/Input";
+import Button from "../../components/Button";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import usePost from "../../queries/public/usePost";
+import { ADD_APPOINTMENT } from "../../api/api";
 
 type Props = {
   date: string;
@@ -14,10 +17,14 @@ type Props = {
 };
 
 const Appointment = (props: Props) => {
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const nav = useNavigate();
+  const [disable, setDisable] = useState(false);
+  //form handling
   type appointment = z.infer<typeof addAppointmentSchema>;
   const {
     register,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors },
     handleSubmit,
   } = useForm<appointment>({
     resolver: zodResolver(addAppointmentSchema),
@@ -25,21 +32,46 @@ const Appointment = (props: Props) => {
       appointment_date: props.date,
       department: props.department,
       doctor_name: props.doctorName,
-      hasVisited: "false",
+      hasVisited: false,
     },
   });
+  //add appointmnet mutation
   const {
     mutation,
     loading: l_addAppointment,
-    error,
-  } = useAppointmentMutation();
+    error: muError,
+    isSuccess: isSuccessBook,
+  } = usePost({
+    api: ADD_APPOINTMENT,
+    queryKey: "appointments",
+    schema: addAppointmentSchema,
+    doctor: props.doctorName,
+    date: props.date,
+  });
+  useEffect(() => {
+    isSuccessBook && nav("/myappointments");
+  }, [isSuccessBook]);
+  //error notify
+  const errNotify = (err: Error | string) =>
+    toast.error(`${err}`, {
+      toastId: "validation-error",
+      className: "text-primary dark:bg-gray-800",
+    });
   const onSubmit: SubmitHandler<appointment> = (data: appointment) => {
     mutation.mutate(data);
   };
-
+  useEffect(() => {
+    if (muError) {
+      muError.message == "User is not authenticated!"
+        ? nav("/login")
+        : errNotify(`${muError.message}`);
+      muError?.message;
+    }
+  }, [muError]);
   return (
     <div>
       <form
+        ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         className="flex mb-8 flex-col justify-strat items-center"
       >
@@ -87,7 +119,20 @@ const Appointment = (props: Props) => {
         </div>
         <div className="my-4">
           {" "}
-          <div>
+          <div className="center flex-col gap-3 ">
+            <div className="center gap-2">
+              {" "}
+              <input
+                defaultChecked={false}
+                id="hasVisited"
+                type="checkbox"
+                {...register("hasVisited")}
+              />{" "}
+              <label htmlFor="hasVisited" className="dark:text-gray-100">
+                have you visited Dr {props.doctorName} before
+              </label>
+            </div>
+
             <select
               id="gender"
               className="w-[300px] dark:bg-gray-800 bg-gray-400 h-[32px]  rounded-md border-[2px] text-primary border-primary"
@@ -107,7 +152,11 @@ const Appointment = (props: Props) => {
             )}
           </div>
         </div>
-        <Button title="make appointment" type="submit" />
+        <Button
+          title="make appointment"
+          type="submit"
+          loading={l_addAppointment}
+        />
       </form>
     </div>
   );

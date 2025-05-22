@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BigLogo from "../assets/BigLogo";
 const Footer = () => {
   return (
-    <div className="grid  border-t-2  border-gray-500  gap-3 justify-items-center p-4  footer grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid dark:bg-none dark:!bg-background   border-t-2  border-primary  gap-3 justify-items-center p-4  footer grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <div className="h-[200px] w-[200px]">
         <BigLogo />
       </div>
@@ -21,10 +21,10 @@ const Footer = () => {
         <h2 className="text-primary">Hours</h2>
         <div className="">
           <span className="mb-1 ">
-            Monday <span>9:00 AM - 11:00 PM</span>
+            Monday <span>2:00 PM - 8:00 PM</span>
           </span>
           <span>
-            Thursday <span>9:00 AM - 11:00 PM</span>
+            Thursday <span>2:00 PM - 8:00 PM</span>
           </span>
         </div>
       </div>

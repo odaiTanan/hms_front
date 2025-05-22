@@ -1,7 +1,6 @@
-import { GET_AVAILABLE_TIME } from "./../api/api";
-import { Axios } from "./../api/Axios";
+import { GET_AVAILABLE_TIME } from "../../api/api";
+import { Axios } from "../../api/Axios";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
 type Props = {
   date: string;

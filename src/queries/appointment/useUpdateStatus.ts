@@ -1,20 +1,22 @@
+import { Axios } from "../../api/Axios";
+import { UPDATE_APPOINTMENT } from "../../api/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DELETE_APPOINTMENT } from "./../api/api";
-import { Axios } from "./../api/Axios";
 
-const useDeleteAppintment = () => {
+const useUpdateStatus = () => {
   const queryClient = useQueryClient();
-  const addAppointment = async (id: string) => {
+  const up = async (A: { id: string; status: string }) => {
     try {
-      const res = await Axios.delete(DELETE_APPOINTMENT + id);
+      const res = await Axios.put(UPDATE_APPOINTMENT + A.id, {
+        status: A.status,
+      });
       return res;
     } catch (err) {
       throw err;
     }
   };
   const mutation = useMutation({
-    mutationFn: addAppointment,
-    onSuccess: (data) => {
+    mutationFn: up,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
     },
   });
@@ -23,8 +25,7 @@ const useDeleteAppintment = () => {
     mutation: mutation,
     loading: mutation.isPending,
     error: mutation.error,
-    isDeleteSuccess: mutation.isSuccess,
   };
 };
 
-export default useDeleteAppintment;
+export default useUpdateStatus;
