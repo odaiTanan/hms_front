@@ -28,7 +28,10 @@ const DoctorsDash = () => {
   return (
     <div className="relativd">
       {isLoading ? (
-        <Loading />
+        //pl for sidebar
+        <div className="center h-[calc(100vh_-_60px)] pl-[50px] md:pl-[70px]">
+          <Loading />
+        </div>
       ) : (
         <div className="container  py-8 grid gap-[30px] justify-center justify-items-center grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
           {show}

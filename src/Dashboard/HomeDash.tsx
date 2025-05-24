@@ -276,10 +276,10 @@ const HomeDash = () => {
                 <option value="Pending" className="text-yellow-400" disabled>
                   Pending
                 </option>
-                <option value="Accepted" className="text-green-400">
+                <option disabled value="Accepted" className="text-green-400">
                   Accepted
                 </option>
-                <option value="Rejected" className="text-red-400">
+                <option disabled value="Rejected" className="text-red-400">
                   Rejected
                 </option>
               </select>
@@ -327,7 +327,10 @@ const HomeDash = () => {
     }
   );
   return l2 || l3 ? (
-    <Loading />
+    //pl for sidebar
+    <div className="center h-[calc(100vh_-_60px)] pl-[50px] md:pl-[70px]">
+      <Loading />
+    </div>
   ) : (
     <div className="w-full">
       <div className="center w-full my-4">
