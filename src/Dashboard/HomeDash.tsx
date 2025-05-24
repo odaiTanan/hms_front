@@ -327,10 +327,7 @@ const HomeDash = () => {
     }
   );
   return l2 || l3 ? (
-    //pl for sidebar
-    <div className="center h-[calc(100vh_-_60px)] pl-[50px] md:pl-[70px]">
-      <Loading />
-    </div>
+    <Loading clasN="left-[calc(50%_+_50px)] md:left-[calc(50%_+_70px)]" />
   ) : (
     <div className="w-full">
       <div className="center w-full my-4">
