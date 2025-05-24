@@ -34,7 +34,7 @@ const Nav = () => {
   }, []);
 
   return (
-    <div className="w-full h-[75px] bg-nav-gradient dark:bg-none dark:!bg-background  sticky top-0 z-[1000] shadow-md  dark:shadow-gray-600 dark:shadow-sm ">
+    <div className="w-full h-[75px] nav-gradient dark:bg-none dark:!bg-background  sticky top-0 z-[1000] shadow-md  dark:shadow-gray-600 dark:shadow-sm ">
       <nav className=" container  top-0 max-w-full h-[75px] flex justify-between items-center">
         <Link className="text-primary" to="/">
           <Logo />
