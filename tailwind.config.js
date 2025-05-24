@@ -4,6 +4,10 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      backgroundImage: {
+        "nav-gradient":
+          "linear-gradient(92deg,rgba(255,210,189,1)0%,rgba(238,238,238,1)40%,rgba(238,238,238,1)60%,rgba(255,210,189,1)100%)",
+      },
       colors: {
         primary: "rgb(var(--primary))",
         secondary: "rgb(var(--secondary))",
@@ -13,6 +17,7 @@ export default {
         g: "rgb(var(--g))",
         skin: "rgb(var(--skin))",
       },
+
       animation: {
         flash: "flash .3s linear",
       },
