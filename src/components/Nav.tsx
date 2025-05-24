@@ -34,7 +34,7 @@ const Nav = () => {
   }, []);
 
   return (
-    <div className="w-full    bg-[linear-gradient(92deg,rgba(255,210,189,1)0%,rgba(238,238,238,1)40%,rgba(238,238,238,1)60%,rgba(255,210,189,1)100%)] dark:bg-none dark:!bg-background  sticky top-0 z-[1000] shadow-md  dark:shadow-gray-600 dark:shadow-sm ">
+    <div className="w-full h-[75px] bg-[linear-gradient(92deg,rgba(255,210,189,1)0%,rgba(238,238,238,1)40%,rgba(238,238,238,1)60%,rgba(255,210,189,1)100%)] dark:bg-none dark:!bg-background  sticky top-0 z-[1000] shadow-md  dark:shadow-gray-600 dark:shadow-sm ">
       <nav className=" container  top-0 max-w-full h-[75px] flex justify-between items-center">
         <Link className="text-primary" to="/">
           <Logo />
