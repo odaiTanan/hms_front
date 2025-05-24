@@ -5,7 +5,7 @@ const Loading = ({ clasN }: Props) => {
   return (
     <div
       role="status"
-      className={`absolute top-[50%]  transform -translate-x-1/2  -translate-2-1/2 ${
+      className={`absolute top-[50%]  transform -translate-x-1/2  -translate-y-1/2 ${
         clasN ? clasN : "left-[50%]"
       }`}
     >

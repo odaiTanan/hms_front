@@ -327,7 +327,7 @@ const HomeDash = () => {
     }
   );
   return l2 || l3 ? (
-    <Loading clasN="left-[calc(50%_+_50px)] md:left-[calc(50%_+_70px)]" />
+    <Loading clasN="left-[calc(50%_+_28px)] md:left-[calc(50%_+_48px)]" />
   ) : (
     <div className="w-full">
       <div className="center w-full my-4">
