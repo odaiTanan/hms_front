@@ -1,5 +1,5 @@
 //host
-export const HOST: string = "https://hms-back-5z37.vercel.app/api/v1/";
+export const HOST: string = "https://backvercel-lime.vercel.app/api/v1/";
 //Auth
 export const REGISTER: string = "/user/patient/register";
 export const LOGIN: string = "/user/login";
