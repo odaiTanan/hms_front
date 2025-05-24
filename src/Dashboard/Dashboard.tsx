@@ -31,7 +31,7 @@ const Dashboard = () => {
         </div>{" "}
         <div className="px-1  h-[calc[100vh_-_60px]] center md:px-5">
           {l1 ? (
-            <Loading />
+            <Loading clasN="left-[calc(50%_+_28px)] md:left-[calc(50%_+_48px)]" />
           ) : (
             <div className="w-[calc(100%_-_70px)]  min-h-[calc(100vh_-_60px)]">
               {" "}
