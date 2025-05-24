@@ -99,12 +99,12 @@ const HomeDash = () => {
   } = useGetQuery({ api: GET_ALL_APPOINTEMENTS, queryKey: "appointments" });
   //delete appointment mutation
   const {
-    mutation: deleteMutation,
+    /* mutation: deleteMutation,*/
     error: e4,
     loading: deleteLoading,
     isDeleteSuccess,
   } = useDelete({ api: DELETE_APPOINTMENT, queryKey: "appointments" });
-  const { mutation: updateMutation, error: e5 } = useUpdateStatus();
+  const { /*mutation: updateMutation,*/ error: e5 } = useUpdateStatus();
   useEffect(() => {
     if (appointments?.data?.appointments) {
       dispatch({ type: "reset" });
@@ -258,7 +258,9 @@ const HomeDash = () => {
             >
               <select
                 defaultValue={appointment.status}
-                onChange={(e) => {
+                onChange={() => {
+                  demo();
+                  /*
                   const val = e.target.value;
                   const item = selectContainers.current[index];
                   item!.style.backgroundColor =
@@ -266,7 +268,7 @@ const HomeDash = () => {
                   updateMutation.mutate({
                     id: appointment._id,
                     status: e.target.value,
-                  });
+                  });*/
                 }}
                 className="bg-transparent outline-none"
                 name="status"
@@ -306,8 +308,9 @@ const HomeDash = () => {
                   key={index}
                   onClick={() => {
                     //select deleted element to make spinner loading on it
-                    setDeleteLoadingBtn(appointment._id);
-                    deleteMutation.mutate(appointment._id);
+                    /* setDeleteLoadingBtn(appointment._id);
+                    deleteMutation.mutate(appointment._id);*/
+                    demo();
                   }}
                   className="text-[#ff0000]"
                 >
